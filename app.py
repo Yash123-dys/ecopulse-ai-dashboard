@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import plotly.express as px
 
 st.set_page_config(
     page_title="EcoPulse AI | Urban Climate Command",
@@ -41,36 +40,30 @@ c4.metric(label="System Status", value="Autonomous 99.8%", delta="Secure")
 
 st.markdown("---")
 
-col_map, col_panel = st.columns([2, 1])
+col_grid, col_panel = st.columns([2, 1])
 
-with col_map:
-    st.subheader(f"📍 Interactive Thermal Heatmap & Grid: {selected_city}")
-    
-    if "Surat" in selected_city:
-        lat, lon = 21.1702, 72.8311
-    elif "London" in selected_city:
-        lat, lon = 51.5074, -0.1278
-    elif "Madrid" in selected_city:
-        lat, lon = 40.4168, -3.7038
-    else:
-        lat, lon = 35.6762, 139.6503
+with col_grid:
+    st.subheader(f"⚡ Live Thermal Stress & Sector Analysis: {selected_city}")
+    st.info("Neural network telemetry active across urban heat islands and micro-climates.")
 
-    # Generate interactive map data points
+    # Structured Thermal Data Grid
     np.random.seed(42)
-    map_df = pd.DataFrame({
-        "lat": lat + np.random.randn(50) * 0.03,
-        "lon": lon + np.random.randn(50) * 0.03,
-        "Heat Stress": np.random.randint(50, 100, size=50)
+    zones = [f"Sector Alpha-{i}" for i in range(1, 7)]
+    df_zones = pd.DataFrame({
+        "Urban Sector": zones,
+        "Surface Temp (°C)": np.random.uniform(38.5, 46.2, size=6).round(1),
+        "Heat Stress Index": np.random.randint(60, 98, size=6),
+        "Mitigation Status": np.random.choice(["Cool Roofs Active", "Urban Greening Deployed", "High Risk - Action Needed"], size=6)
     })
+    
+    st.dataframe(df_zones, use_container_width=True)
 
-    # Plotly Scatter Mapbox (Guaranteed to render without errors)
-    fig = px.scatter_mapbox(
-        map_df, lat="lat", lon="lon", color="Heat Stress",
-        color_continuous_scale="Reds", size_max=15, zoom=11,
-        mapbox_style="carto-darkmatter"
+    st.subheader("📈 24-Hour Thermal & Carbon Analytics")
+    chart_data = pd.DataFrame(
+        np.random.randn(24, 2) * [1.5, 40] + [42, 1200],
+        columns=['Thermal Index (°C equivalent)', 'Carbon Absorption Rate (t/h)']
     )
-    fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, height=400)
-    st.plotly_chart(fig, use_container_width=True)
+    st.line_chart(chart_data)
 
 with col_panel:
     st.subheader("🛡️ AI Mitigation Strategies")
