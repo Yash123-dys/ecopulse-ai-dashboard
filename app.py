@@ -3,14 +3,12 @@ import pandas as pd
 import numpy as np
 import pydeck as pdk
 
-# Page Configuration for High-End Futuristic UI
 st.set_page_config(
     page_title="EcoPulse AI | Holographic Urban Climate Command",
     page_icon="🌍",
     layout="wide"
 )
 
-# Custom Sci-Fi Dark Theme CSS Injection
 st.markdown("""
     <style>
     .main {
@@ -25,18 +23,14 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Header Section
 st.title("🌍 EcoPulse AI: Holographic Urban Climate & Resilience Command")
 st.markdown("**Real-Time Spatial Intelligence & Autonomous Heat Mitigation Platform**")
 
-# Sidebar Controls for Target City
-st.sidebar.header("Command Center Controls")
 selected_city = st.sidebar.selectbox(
     "Select Metropolitan Sector",
     ["Surat, Gujarat (Pilot Core)", "London, UK (Global Prime)", "Madrid, Spain", "Tokyo, Japan"]
 )
 
-# Top Holographic Metrics Grid
 c1, c2, c3, c4 = st.columns(4)
 c1.metric(label="Net Zero Progress", value="78.4%", delta="+3.2%")
 c2.metric(label="Air Quality Index (AQI)", value="98 (Excellent)", delta="+12 pts")
@@ -45,7 +39,6 @@ c4.metric(label="System Status", value="Autonomous 99.8%", delta="Secure")
 
 st.markdown("---")
 
-# Split Layout: 3D Heat Map & Mitigation Panels
 col_map, col_panel = st.columns([2, 1])
 
 with col_map:
@@ -60,57 +53,51 @@ with col_map:
 
     np.random.seed(101)
     map_data = pd.DataFrame(
-        np.random.randn(120, 2) / [40, 40] + [lat, lon],
+        np.random.randn(100, 2) / [50, 50] + [lat, lon],
         columns=['lat', 'lon']
     )
-    map_data['heat_stress_index'] = np.random.randint(45, 98, size=120)
-    map_data['mitigation_status'] = np.random.choice(['Active Cool Roofs', 'Urban Greening', 'High Risk Zone'], size=120)
+    map_data['heat_stress'] = np.random.randint(50, 100, size=100)
 
+    # Reliable Scatterplot Layer along with Map to avoid blank screen
     layer = pdk.Layer(
-        "HexagonLayer",
+        "ScatterplotLayer",
         map_data,
         get_position=["lon", "lat"],
-        radius=180,
-        elevation_scale=6,
-        elevation_range=[0, 1200],
-        pickable=True,
-        extruded=True,
-        coverage=0.9
+        get_color='[255, 50, 50, 180]',
+        get_radius=200,
+        pickable=True
     )
 
     view_state = pdk.ViewState(
         latitude=lat,
         longitude=lon,
         zoom=12,
-        pitch=55,
-        bearing=15
+        pitch=40,
     )
 
     r = pdk.Deck(
-        layers=[layer], 
-        initial_view_state=view_state, 
-        tooltip={"text": "Thermal Stress Level: {heat_stress_index}\nStrategy: {mitigation_status}"},
-        map_style=pdk.map_styles.DARK
+        layers=[layer],
+        initial_view_state=view_state,
+        tooltip={"text": "Thermal Stress Index: {heat_stress}"},
+        map_style="mapbox://styles/mapbox/dark-v10"
     )
-    st.pydeck_chart(r)
+    
+    # Render with explicit container width
+    st.pydeck_chart(r, use_container_width=True)
 
 with col_panel:
     st.subheader("🛡️ Mitigation Strategies")
-    st.info("AI-driven automated cooling actions deployed across high-density sectors:")
-    
+    st.info("AI-driven automated cooling actions:")
     st.markdown("""
-    * **Cool Roofs Deployment:** `54% Covered`
-      *(Reflective white coatings reducing surface absorption)*
-    * **Urban Greening & Canopy Cover:** `62% Optimized`
-      *(Strategic vertical forests and parks placement)*
-    * **Water Mist Hydration Grids:** `Active (18 zones)`
-    * **Carbon Emission Reductions:** `-24.5% YoY`
+    * **Cool Roofs:** `54% Covered`
+    * **Urban Greening:** `62% Optimized`
+    * **Water Mist Grids:** `Active (18 zones)`
+    * **Emission Reductions:** `-24.5% YoY`
     """)
-    
     st.markdown("---")
     st.subheader("📊 Green Space Impact")
     st.progress(0.82)
-    st.caption("82% thermal reduction achieved via localized park microclimates.")
+    st.caption("82% thermal reduction achieved.")
 
 st.markdown("---")
-st.markdown("🔒 **EcoPulse AI Neural Core** | Connected to Satellite Telemetry & Local Sensor Mesh.")
+st.markdown("🔒 **EcoPulse AI Neural Core** | Connected to Satellite Telemetry.")
