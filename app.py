@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import pydeck as pdk
 
 st.set_page_config(
     page_title="EcoPulse AI | Holographic Urban Climate Command",
@@ -18,7 +17,6 @@ st.markdown("""
     h1, h2, h3 {
         font-family: 'Helvetica Neue', sans-serif;
         color: #00ffcc !important;
-        text-shadow: 0px 0px 10px rgba(0, 255, 204, 0.4);
     }
     </style>
 """, unsafe_allow_html=True)
@@ -51,39 +49,15 @@ with col_map:
     else:
         lat, lon = 40.4168, -3.7038
 
-    np.random.seed(101)
+    # Generate map data points
+    np.random.seed(42)
     map_data = pd.DataFrame(
-        np.random.randn(100, 2) / [50, 50] + [lat, lon],
+        np.random.randn(50, 2) / 50 + [lat, lon],
         columns=['lat', 'lon']
     )
-    map_data['heat_stress'] = np.random.randint(50, 100, size=100)
-
-    # Reliable Scatterplot Layer along with Map to avoid blank screen
-    layer = pdk.Layer(
-        "ScatterplotLayer",
-        map_data,
-        get_position=["lon", "lat"],
-        get_color='[255, 50, 50, 180]',
-        get_radius=200,
-        pickable=True
-    )
-
-    view_state = pdk.ViewState(
-        latitude=lat,
-        longitude=lon,
-        zoom=12,
-        pitch=40,
-    )
-
-    r = pdk.Deck(
-        layers=[layer],
-        initial_view_state=view_state,
-        tooltip={"text": "Thermal Stress Index: {heat_stress}"},
-        map_style="mapbox://styles/mapbox/dark-v10"
-    )
     
-    # Render with explicit container width
-    st.pydeck_chart(r, use_container_width=True)
+    # Display reliable Streamlit map
+    st.map(map_data, zoom=11)
 
 with col_panel:
     st.subheader("🛡️ Mitigation Strategies")
